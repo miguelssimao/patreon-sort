@@ -3,45 +3,34 @@ import ps_functions as main
 import ps_settings as patreon
 import ps_loading as progress
 from tabulate import tabulate
-from selenium.common.exceptions import NoSuchElementException
 
 # start
-progress.first = True
-driver = sel.webDriver()
+sel.setupDriver()
 main.startThread(progress.loading)
 
 # run
-driver.get("https://www.patreon.com/" + patreon.profileUsername + "/posts")
-main.bypassCookies(driver)
+sel.openProfile(patreon.profileUsername)
+main.bypassCookies()
 
 # filter posts
-main.scrollToFilters(driver)
-main.filterByImagesOnly(patreon.postsImagesOnly, driver)
-main.filterByPublicTier(patreon.postsPublicOnly, driver)
+main.scrollToFilters()
+main.filterByImagesOnly(patreon.postsImagesOnly)
+main.filterByPublicTier(patreon.postsPublicOnly)
 
 # scroll to bottom
-main.scrollToBottom(driver)
-main.removeBanner(driver)
+main.scrollToBottom()
+main.removeBottom()
 
 # load all posts
-main.loadAllPosts(driver)
-progress.final = True
+main.loadAllPosts()
 
 # grab web elements
-all_likes, all_hrefs = ([] for i in range(2))
-match_likes, match_hrefs = sel.findElements(patreon.likes, driver), sel.findElements(patreon.hrefs, driver)
+all_likes, all_hrefs = ([] for _ in range(2))
+match_likes, match_hrefs = sel.findElements(patreon.likes), sel.findElements(patreon.hrefs)
 
-for i in match_likes:
-    try:
-        sel.findLikes(i, patreon.count, all_likes)
-    except NoSuchElementException:
-        all_likes.append(0)
-
-for i in match_hrefs:
-    try:
-        sel.findHrefs(i, all_hrefs)
-    except NoSuchElementException:
-        all_hrefs.append(i.text)
+# filter web elements
+main.appendLikes(match_likes, all_likes)
+main.appendHrefs(match_hrefs, all_hrefs)
 
 # combine and print
 progress.done = True
