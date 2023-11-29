@@ -2,7 +2,7 @@ from time import sleep
 from itertools import cycle
 from sys import stdout as terminal
 
-done, first, bypass, bytype, bytier, load, final = (False for i in range(7))
+done, first, bypass, bytype, bytier, load, final = (False for _ in range(7))
 
 
 def loading():
