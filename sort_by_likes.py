@@ -1,32 +1,26 @@
-import ps_selenium as sel
-import ps_functions as main
-import ps_settings as patreon
-import ps_loading as progress
+import lib.selenium as sele
+import lib.activity as main
 from tabulate import tabulate
+import lib.settings as patreon
+import lib.progress as progress
 
 # start
-sel.setupDriver()
-main.startThread(progress.loading)
+main.startThread()
+sele.setupDriver()
 
 # run
-sel.openProfile(patreon.profileUsername)
+sele.openProfile(patreon.profileUsername)
 main.bypassCookies()
 
 # filter posts
-main.scrollToFilters()
-main.filterByImagesOnly(patreon.postsImagesOnly)
-main.filterByPublicTier(patreon.postsPublicOnly)
-
-# scroll to bottom
-main.scrollToBottom()
-main.removeBottom()
+main.filterPosts(patreon.postsImagesOnly, patreon.postsPublicOnly)
 
 # load all posts
 main.loadAllPosts()
 
 # grab web elements
 all_likes, all_hrefs = ([] for _ in range(2))
-match_likes, match_hrefs = sel.findElements(patreon.likes), sel.findElements(patreon.hrefs)
+match_likes, match_hrefs = sele.findElements(patreon.likes), sele.findElements(patreon.hrefs)
 
 # filter web elements
 main.appendLikes(match_likes, all_likes)
