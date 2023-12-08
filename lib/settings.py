@@ -1,5 +1,5 @@
 # patreon settings
-profileUsername  = "greenteahoney"
+profileUsername  = "username goes here"
 postsImagesOnly  = True
 postsPublicOnly  = True
 
